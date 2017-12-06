@@ -77,10 +77,16 @@ for i in range(1,nLi+1):
             val = 0
             busca(ma,i,j)
             if val > 0:
-                print('round')
-                print(nOvelhas, nLobos)
+                #print('round')
+                #print(nOvelhas, nLobos)
+                if nOvelhas > nLobos:
+                    nO += nOvelhas
+                elif nLobos > nOvelhas:
+                    nL += nLobos
+                else:
+                    nL += nLobos
 
     #print(nO, nL)
 
-#print(nO, nL)
-debug_ma(ma)
+print(nO, nL)
+#debug_ma(ma)
