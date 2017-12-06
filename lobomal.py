@@ -57,15 +57,6 @@ def busca(ma,i,j):
     busca(ma,i+1,j)#olha em baixo
 
 #programa
-#nOvelhas = 0
-#nLobos = 0
-'''
- se em um determinado pasto houver mais ovelhas do que lobos, as
-ovelhas sobrevivem e matam todos os lobos naquele pasto. Caso contrário, as
-ovelhas daquele pasto são comidas pelos lobos, que sobrevivem. Note que caso
-um pasto possua o mesmo número de lobos e ovelhas, somente os lobos
-sobreviverão, já que lobos são predadores naturais, ao contrário de ovelhas
-'''
 ma, nLi, nCo = entrada()
 nO = 0
 nL = 0
