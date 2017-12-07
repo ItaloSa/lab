@@ -5,10 +5,10 @@ class Node():
 
     def __str__(self):
         return str(self.__value)
-    
+
     def get_value(self):
         return self.__value
-    
+
     def set_value(self, value):
         self.__value = value
 
@@ -25,17 +25,17 @@ class Lista():
 
     def __str__(self):
         if self.lista_esta_vazia():
-            return '[]'
+            return ''
         node_atual = self.__inicio
-        string = '['
+        string = ''
         while node_atual is not None:
-            string += str(node_atual.get_value()) + ', '
+            string += str(node_atual.get_value())
             node_atual = node_atual.get_ponteiro()
-        return string + ']'
+        return string
 
     def lista_esta_vazia(self):
         return self.__inicio is None
-    
+
     def add_no_fim(self, value):
         novo_node = Node(value)
         if self.lista_esta_vazia():
@@ -43,7 +43,7 @@ class Lista():
         else:
             self.__fim.set_ponteiro(novo_node)
             self.__fim = novo_node
-    
+
     def add_no_inicio(self, value):
         novo_node = Node(value)
         if self.lista_esta_vazia():
@@ -75,7 +75,7 @@ class Lista():
             node_atual.set_ponteiro(None)
             self.__fim = node_atual
         return valor_ultimo_node
-    
+
     def get_inicio(self):
         return self.__inicio
 
@@ -84,7 +84,7 @@ class Lista():
 
     def set_inicio(self, value):
         self.__inicio = value
-        
+
     def set_fim(self, value):
         self.__fim = value
 
@@ -92,7 +92,7 @@ class Pilha(Lista):
 
     def colocar_na_pilha(self, value):
         self.add_no_inicio(value)
-        
+
     def tirar_da_pilha(self):
         return self.remove_do_inicio()
 
@@ -101,17 +101,17 @@ def fib(n):
         return 1
     fib = 2
     pilha = Pilha()
-    #pilha iniciando com [1, 1]
+    #pilha inicia com [1, 1]
     pilha.colocar_na_pilha(1)
     pilha.colocar_na_pilha(1)
     while fib != n:
         u = pilha.tirar_da_pilha()
         p = pilha.tirar_da_pilha()
-        r = u + p
+        r = p + u
         pilha.colocar_na_pilha(p)
         pilha.colocar_na_pilha(u)
         pilha.colocar_na_pilha(r)
         fib += 1
     return pilha.tirar_da_pilha()
 
-print(fib(5))
+print(fib(3))
