@@ -1,5 +1,3 @@
-#arvore binaria
-#rel: 1
 #CamelCase code
 
 class Node():
@@ -104,22 +102,6 @@ class Tree(Node):
     def isEmpty(self):
         return self._root is None
     
-    #not working
-    def leftRotate(self, value):
-        node = self.treeSearch(value)
-        y = node.getRight()
-        node.setRight(y.getLeft())
-        y.getLeft().setFather(node)
-        y.setFather(node.getFather())
-        if x.getFather == None:
-            self._root = y
-        elif node == node.getFather().getLeft():
-            node.getFather().setLeft(y)
-        else:
-            node.getFather().setRight(y)
-        y.setLeft(node)
-        node.getFather(y)
-
     def treeMaximum(self, node):
         while node.getLeft() != None:
             node = node.getLeft()
@@ -148,48 +130,3 @@ class Tree(Node):
             node = y
             y = y.getFather()
         return y
-    
-#talvez use
-    def isLeft(self, node):
-        q = node.getFather()
-        if q == None:
-            return False
-        elif q.getLeft() == node:
-            return True
-        else:
-            return False
-    
-    def isRight(self, node):
-        q = node.getFather()
-        if q == None:
-            return False
-        elif q.getRight() == node:
-            return True
-        else:
-            return False
-    
-    def getBrother(self, node):
-        if self.isRoot(node):
-            return False
-        elif node.isLeft:
-            return node.getFather().getRight()
-        else:
-            return node.getFather().getLeft()
-    
-#fim do talvez use
-
-
-#debug
-tree = Tree()
-tree.addNode(2)
-tree.addNode(1)
-tree.addNode(3)
-tree.addNode(5)
-tree.addNode(4)
-tree.addNode(6)
-
-r = tree.treeSearch(2)
-print(r.getRight())
-print(tree)
-tree.leftRotate(2)
-print(tree)
