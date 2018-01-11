@@ -1,21 +1,30 @@
+class noneNode():
+    def __init__(self):
+        self._color = 'black'
+        self._key = None
+
 class Node():
-    def __init__(self, data):
+    def __init__(self, key, data=None):
+        self._key = key
         self._data = data
         self._father = None
         self._left = None
         self._right = None
 
     def __str__(self):
-        return str(self._data)
+        return str(self._key)
 
     def __repr__(self):
-        return str(self._data)
-
+        return str(self._key)
+    
     def getData(self):
         return self._data
 
     def getFather(self):
         return self._father
+
+    def getKey(self):
+        return self._key   
 
     def getLeft(self):
         return self._left
@@ -28,7 +37,10 @@ class Node():
 
     def setFather(self, value):
         self._father = value
-    
+
+    def setKey(self, value):
+        self._key = value
+  
     def setLeft(self, value):
         self._left = value
     
@@ -46,20 +58,20 @@ class Tree(Node):
     def __repr__(self):
         return 'raiz:', self._root
     
-    def add(self, value):
-        node = Node(value)
+    def add(self, key, data=None):
+        node = Node(key, data)
         y = None
         x = self._root
         while x != None:
             y = x
-            if node.getData() < x.getData():
+            if node.getKey() < x.getKey():
                 x = x.getLeft()
             else:
                 x = x.getRight()
         node.setFather(y)
         if y == None:
             self._root = node
-        elif node.getData() < y.getData():
+        elif node.getKey() < y.getKey():
             y.setLeft(node)
         else:
             y.setRight(node)
@@ -85,23 +97,53 @@ class Tree(Node):
                 else:
                     y.getFather().setRight(x)
             if y != z:
-                z.setData(y.getData())
+                z.setKey(y.getKey())
             return y
-
-    def minimum(self, node):
-        while node.getLeft() != None:
-            node = node.getLeft()
-        return node
 
     def maximum(self, node):
         while node.getRight() != None:
             node = node.getRight()
         return node
 
+    def minimum(self, node):
+        while node.getLeft() != None:
+            node = node.getLeft()
+        return node
+    
+    def leftRotate(self, x):
+        y = x.getRight()
+        x.setRight(y.getLeft())
+        if y.getLeft() != None:
+            y.getFather().setLeft(x)
+        y.setFather(x.getFather())
+        if x.getFather() == None:
+            self._root = y
+        elif x == x.getFather().getLeft():
+            x.getFather().setLeft(y)
+        else:
+            x.getFather().setRight(y)
+        y.setLeft(x)
+        x.setFather(y)
+    
+    def rightRotate(self, x):
+        y = x.getLeft()
+        x.setLeft(y.getRight())
+        if y.getRight() != None:
+            y.getFather().setRight(x)
+        y.setFather(x.getFather())
+        if x.getFather() == None:
+            self._root = y
+        elif x == x.getFather().getRight():
+            x.getFather().setRight(y)
+        else:
+            x.getFather().setLeft(y)
+        y.setRight(x)
+        x.setFather(y)
+
     def search(self, value):
         node = self._root
-        while node != None and value != node.getData():
-            if value < node.getData():
+        while node != None and value != node.getKey():
+            if value < node.getKey():
                 node = node.getLeft()
             else:
                 node = node.getRight()
@@ -116,30 +158,6 @@ class Tree(Node):
             y = node.getFather()
         return y
     
-    def delete(self, value):
-        z = self.search(value)
-        if z != None:
-            if z.getLeft() == None or z.getRight() == None:
-                y = z
-            else:
-                y = self.successor(z)
-            if y.getLeft() != None:
-                x = y.getLeft()
-            else:
-                x = y.getRight()
-            if x != None:
-                x.setFather(y.getFather())
-            if y.getFather() == None:
-                self._root = x
-            else:
-                if y == y.getFather().getLeft():
-                    y.getFather().setLeft(x)
-                else:
-                    y.getFather().setRight(x)
-            if y != z:
-                z.setData(y.getData())
-            return y
-
     #views
     def inOrderPrint(self):
         if self._root is not None:
@@ -201,8 +219,22 @@ class Tree(Node):
     def inorderTreeWalk2(self, node):
         if node != None:
             self.inorderTreeWalk2(node.getLeft())
-            if node.getData() > self._maior and node.getData() < self._x:
-                self._maior = node.getData()
+            if node.getKey() > self._maior and node.getKey() < self._x:
+                self._maior = node.getKey()
             self.inorderTreeWalk2(node.getRight())
 
 #--------------------------------------------------------------------
+
+t = Tree()
+t.add(2)
+t.add(1)
+t.add(4)
+t.add(3)
+t.add(5)
+print(t.inPreOrderPrint())
+r = t.search(4)
+t.leftRotate(r)
+print(t.inPreOrderPrint())
+r = t.search(5)
+t.rightRotate(r)
+print(t.inPreOrderPrint())
