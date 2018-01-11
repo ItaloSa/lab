@@ -6,7 +6,7 @@ class Node():
         self._right = None
 
     def __str__(self):
-        return '<' + str(self._data) + '>'
+        return  str(self._data) + ' '
 
     def getData(self):
         return self._data
@@ -66,31 +66,33 @@ class Tree(Node):
             y.setRight(node)
     
     def deleteNode(self, value):
-        node = self.treeSearch(value)
-        if node.getLeft() == None or node.getRight() == None:
-            y = node
-        else:
-            y = self.treeSucessor(node)
+        if self.inTree(value):
+            node = self.treeSearch(value, self._root)
+            if node.getLeft() == None or node.getRight() == None:
+                y = node
+            else:
+                y = self.treeSucessor(node)
+            
+            if y.getLeft() != None:
+                x = y.getLeft()
+            else:
+                x = y.getRight()
+            
+            if x != None:
+                x.setFather(y.getFather())
+            
+            if y.getFather() == None:
+                self._root = x
+            elif y == y.getFather().getLeft():
+                y.getFather().setLeft(x)
+            else:
+                y.getFather().setRight(x)
+            
+            if y != node:
+                node.setData(y.getData())
+            
+            return y
         
-        if y.getLeft() != None:
-            x = y.getLeft()
-        else:
-            x = y.getRight()
-        
-        if x != None:
-            x.setFather(y.getFather())
-        
-        if y.getFather() == None:
-            self._root = x
-        elif y == y.getFather().getLeft():
-            y.getFather().setLeft(x)
-        else:
-            y.getFather().setRight(x)
-        
-        if y != node:
-            node.setData(y.getData())
-        
-        return y
 
     def view(self, node):
         if node != None:
@@ -108,7 +110,7 @@ class Tree(Node):
     #prints -----
     def inOrderPrint(self):
         if self.isEmpty():
-            return 0
+            return str('0 ')
         else:
             self.inOrder(self._root)
             out = self._view
@@ -123,7 +125,7 @@ class Tree(Node):
    
     def inPreOrderPrint(self):
         if self.isEmpty():
-            return 0
+            return str('0 ')
         else:
             self.inPreOrder(self._root)
             out = self._view
@@ -138,7 +140,7 @@ class Tree(Node):
     
     def inPostOrderPrint(self):
         if self.isEmpty():
-            return 0
+            return str('0 ')
         else:
             self.inPostOrder(self._root)
             out = self._view
@@ -150,6 +152,7 @@ class Tree(Node):
             self.inPostOrder(node.getLeft())            
             self.inPostOrder(node.getRight())
             self._view += str(node)
+    #prints -----
 
     def isRoot(self, node):
         return node == self._root
@@ -168,8 +171,6 @@ class Tree(Node):
         return node
     
     def treeSearch(self, value, node=None):
-        if node == None:
-            node = self._root
         if value == None or value == node.getData():
             return node
         if value < node.getData():
@@ -194,7 +195,7 @@ class Tree(Node):
         self._maior = 0
         self._x = 0 
         return out
-    
+
     def inTree(self, value):
         self._inTree = value
         self.walkOnTree(self._root)
@@ -207,19 +208,63 @@ class Tree(Node):
             self._inTreeCount = 0
             return False
 
-
     def walkOnTree(self, node):
         if node != None:
-            print(node)
             if node.getData() == self._inTree:
                 self._inTreeCount += 1
             self.walkOnTree(node.getLeft())            
             self.walkOnTree(node.getRight())
 
-tree = Tree()
-tree.addNode(2)
-tree.addNode(1)
-tree.addNode(3)
+tree = Tree()   
+
+tree.addNode(6382)
+tree.addNode(849)
+tree.addNode(5996)
+tree.addNode(1365)
+tree.addNode(6887)
+tree.addNode(3142)
+tree.addNode(2822)
+tree.addNode(8536)
+tree.addNode(5732)
+tree.addNode(6607)
+tree.addNode(3381)
+tree.addNode(3925)
+tree.addNode(5524)
+tree.addNode(3665)
+tree.addNode(3598)
+tree.addNode(9217)
+tree.addNode(4720)
+r = tree.treeSearch(6382)
+print(r.getFather())
+tree.addNode(8693)
+tree.addNode(1903)
+tree.addNode(1316)
+tree.addNode(8905)
+tree.addNode(5987)
+tree.addNode(1124)
+tree.addNode(7842)
+tree.addNode(3582)
+tree.deleteNode(6382)
+tree.deleteNode(1903)
+tree.addNode(5348)
+tree.deleteNode(5105)
+tree.addNode(5059)
+tree.addNode(7556)
+tree.addNode(3345)
+tree.deleteNode(1883)
+tree.deleteNode(5824)
+tree.addNode(311)
+tree.addNode(8925)
+tree.addNode(1956)
+tree.deleteNode(3925)
+tree.deleteNode(5996)
+tree.deleteNode(1903)
+tree.addNode(6314)
+tree.addNode(3357)
+tree.addNode(4273)
+#tree.deleteNode(4720)
+#tree.deleteNode(1429)
 
 
-print(tree.inTree(1))
+
+print(tree)

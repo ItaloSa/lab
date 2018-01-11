@@ -66,7 +66,7 @@ class Tree(Node):
             y.setRight(node)
     
     def deleteNode(self, value):
-        node = self.treeSearch(value)
+        node = self.treeSearch(value, self._root)
         if node.getLeft() == None or node.getRight() == None:
             y = node
         else:
@@ -169,8 +169,6 @@ class Tree(Node):
         return node
     
     def treeSearch(self, value, node=None):
-        if node == None:
-            node = self._root
         if value == None or value == node.getData():
             return node
         if value < node.getData():
@@ -245,9 +243,5 @@ def run(caso):
 
 #--------------------------------------------------------------------
 caso = 1
-while True:
-    try:        
-        run(caso)
-        caso += 1
-    except:
-        break
+run(caso)
+        
