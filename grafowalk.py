@@ -42,26 +42,40 @@ class Heap:
 class Node():
     def __init__(self):
         self.distance = inf
-        self.caminho = -1
+        self.caminho = 0
+        self.adjacente = {} # { vertice: distancia }
+    
+    def __str__(self):
+        return 'd: ' + str(self.distance) + ' ' + 'c: ' + str(self.caminho)
+    
+    def __repr__(self):
+        return 'dist: ' + str(self.distance) + ' ' + 'caminho: ' + str(self.caminho) + '\n'
+    
 
-class Dijkstra():
+    def addDistance(self, v, w):
+        self.adjacente[v] = w
+
+class grafoWalk():
     def __init__(self, vertices):
         self.heap = Heap()
-        self.vertices = [i for i in range(vertices)]
-        self.weights = [{} for i in range(vertices)]
-        self.nodes = [Node() for i in range(vertices)]
-
-    def start(self):
-        self.heap.heapify(self.vertices)
-        while self.heap.currentSize is not 0:
-            u = self.heap.delMin()
-            for v in self.weights[u]:
-                if self.nodes[v].distance > self.nodes[u].distance + self.weights[u][v]:
-                    self.nodes[v].distance = self.nodes[u].distance + self.weights[u][v]
-                self.nodes[v].caminho = u
+        self.vertices = [Node() for i in range(vertices)]
+        self.Q = [i for i in range(vertices)]
     
+    def start(self):
+        self.heap.heapify(self.Q)
+        self.vertices[0].distance = 0
+        self.vertices[0].caminho = -1
+        #print(self.heap.heapList)
+        while self.heap.currentSize > 0:
+            u = self.heap.delMin()
+            for v in self.vertices[u].adjacente:
+                if self.vertices[v].distance > self.vertices[u].distance:
+                    self.vertices[v].distance = self.vertices[u].distance + self.vertices[u].adjacente[v]
+                    self.vertices[v].caminho += u
+
     def addDistance(self, u, v, w):
-        self.weights[u][v] = w
+        self.vertices[u].addDistance(v, w)
+
 
 '''
 enquanto Q ≠ ø
@@ -72,13 +86,18 @@ enquanto Q ≠ ø
                        π[v] ← u
 '''
 
-x = Dijkstra(3)
-x.addDistance(0, 1, 2)
-x.addDistance(0, 2, 4)
-x.addDistance(1, 3, 1)
-x.addDistance(2, 3, 5)
+
+inpt = input().split()
+vertices = int(inpt[0])
+voo = int(inpt[1])
+x = grafoWalk(vertices)
+for i in range(voo):
+    comando = input().split()
+    x.addDistance(int(comando[0]), int(comando[1]), int(comando[2]))
 
 x.start()
+
+print(x.vertices)
 
 # bh = Heap()
 # bh.heapify([9,5,6,2,3])
