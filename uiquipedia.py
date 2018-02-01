@@ -1,64 +1,82 @@
-''' 
-entrada
+#const
+inf = float("inf")
 
-A B
-A C
-C D
+#functs
+def inicializa(grafo, s):
+    distancias = {}
+    for vertice in grafo.items():
+        distancias[vertice[0]] = inf
+    distancias[s] = 0 
+    return distancias
 
-'''
-cnt = 0
-found = False
+def relaxa(grafo, q, u, dist_de_u, v):
+    try:
+        if q[v] > dist_de_u + grafo[u][v]:
+            q[v] = dist_de_u + grafo[u][v]
+    except:
+        pass
 
-def sequencial(indice, palavra1, palavra2):
-    d1 = indice.index(palavra1)
-    d2 = indice.index(palavra2)
-    return abs(d1 - d2)
+def dijkstra(grafo, s):
+    distancias = inicializa(grafo, s)
+    s = {}
+    q = distancias
+    while len(q) is not 0:
+        u = min(q, key=q.get)
+        dist_de_u = q.pop(u)
+        s[u] = dist_de_u
+        for vertice in grafo[u]:
+            relaxa(grafo, q, u, dist_de_u, vertice)
+    return s
 
-def direta(grafo, palavra1, palavra2):
-    global cnt, found
-    if palavra1 == palavra2:
-        found = True
-        return cnt
-    if palavra1 in grafo:
-        cnt += 1
-        for palavra in grafo[palavra1]:
-            direta(grafo, palavra, palavra2)
-    else:
-        return None
+# ------------------- MAIN --------------------------
 
-palavras = {}
-grafo = {}
+def main():
+    grafo = {}
+    sequencial = []
 
-comando1 = int(input())
-for i in range(comando1):
-    inpt = input().split()
-    #sequencial
-    for palavra in inpt:
-        if palavra not in palavras:
-            palavras[palavra] = 1 #peso
-    #grafo
-    if inpt[0] not in grafo:
-        grafo[inpt[0]] = [inpt[1]]
-    else:
-        grafo[inpt[0]].append(inpt[1])
+    loop = int(input())
+    for l in range(loop):
+        entrada = input().split()
+        if entrada[0] not in sequencial:
+            sequencial.append(entrada[0])
+        if entrada[1] not in sequencial:
+            sequencial.append(entrada[1])
+        if entrada[0] not in grafo:
+            grafo[entrada[0]] = ({entrada[1]: 1 })
+        else:
+            grafo[entrada[0]].update({entrada[1]: 1})
+        
+    ordenado = sorted(sequencial)
+    for i in range(len(ordenado)-1):
+        if ordenado[i] in grafo:
+            grafo[ordenado[i]].update({ordenado[i+1]: 1})
+            if ordenado[i+1] in grafo:
+                grafo[ordenado[i+1]].update({ordenado[i]: 1})
+            else:
+                grafo[ordenado[i+1]]= {ordenado[i]: 1}
+        else:
+            grafo[ordenado[i]] = ({ordenado[i+1]: 1})
+            if ordenado[i+1] in grafo:
+                grafo[ordenado[i+1]].update({ordenado[i]: 1})
+            else:
+                grafo[ordenado[i+1]]= {ordenado[i]: 1}
 
-#linha em branco
-x = input()
 
-indice = sorted(palavras)
+    x = input()
 
-#print(indice)
-#print(grafo)
-#print('')
+    comando = input().split()
+    resultado = dijkstra(grafo, comando[0])
+    print(resultado[comando[1]])
 
-busca = input().split()
-palavra1 = busca[0]
-palavra2 = busca[1]
 
-seq = sequencial(indice, palavra1, palavra2)
-direta(grafo, palavra1, palavra2)  
+############# DEBUG ################
 
-if found:
-    print(min(seq, cnt))
-else:
-    print(seq)
+# grafo2 = {
+#     'a': {'b': 1},
+#     'b': {'c': 1, 'd': 1, 'a': 1},
+#     'c': {'d': 1},
+#     'd': {'c': 1}
+# }
+# x = dijkstra(grafo2, 'a')
+# print(x)
+main()
